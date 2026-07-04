@@ -1,0 +1,45 @@
+{
+  "name": "@nicolaithomson/visual-harness",
+  "version": "0.1.0",
+  "description": "Headless authenticated-UI screenshot harness + fail-closed dev login guard (framework-agnostic).",
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "prepublishOnly": "node --test"
+  },
+  "bin": {
+    "visual-shoot": "bin/shoot.mjs",
+    "visual-login": "bin/login.mjs"
+  },
+  "exports": {
+    ".": {
+      "types": "./src/guard.d.ts",
+      "import": "./src/guard.mjs"
+    },
+    "./guard": {
+      "types": "./src/guard.d.ts",
+      "import": "./src/guard.mjs"
+    }
+  },
+  "files": ["bin", "src", "README.md", "LICENSE"],
+  "dependencies": {
+    "@playwright/test": "^1.61.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": ["playwright", "screenshot", "visual-testing", "e2e", "auth", "supabase", "nextjs"],
+  "author": "Nicolai Thomson",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nicolaithomson/visual-harness.git"
+  },
+  "homepage": "https://github.com/nicolaithomson/visual-harness#readme",
+  "bugs": {
+    "url": "https://github.com/nicolaithomson/visual-harness/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
