@@ -3,6 +3,11 @@ name: Publish
 # Publishes to npm when a version tag is pushed, e.g.:
 #   npm version patch   # bumps package.json + creates a vX.Y.Z tag
 #   git push --follow-tags
+#
+# Auth: npm OIDC "trusted publishing" — NO NPM_TOKEN secret. Requires a one-time
+# setup on npmjs.com: the package → Settings → Trusted Publisher → GitHub Actions,
+# org/repo `nicolaithomson/visual-harness`, workflow `publish.yml`. npm exchanges
+# the workflow's OIDC token automatically and generates provenance.
 on:
   push:
     tags: ["v*"]
@@ -12,16 +17,16 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      id-token: write # required for npm provenance
+      id-token: write # required for npm OIDC trusted publishing + provenance
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           registry-url: https://registry.npmjs.org
+      - name: Ensure npm supports OIDC trusted publishing (>= 11.5.1)
+        run: npm install -g npm@latest
       - name: Guard fail-closed matrix
         run: node --test
-      - name: Publish to npm
+      - name: Publish to npm (OIDC trusted publishing — no token)
         run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
